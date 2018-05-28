@@ -160,8 +160,8 @@ void Camera::makeImage(int sizeX, int sizeY, int numberOfRays) const
         {
             for(int k = 0; k < numberOfRays; k++)
             {
-                Point3d p( ((2.0f/sizeX) - 1.0f),
-                           ((2.0f/sizeY) - 1.0f),
+                Point3d p( (( (i * 2.0f) / sizeX) - 1.0f),
+                           (( (j * 2.0f) / sizeY) - 1.0f),
                            0.0f );
 
                 Vector3d rayOP(m_direction);
