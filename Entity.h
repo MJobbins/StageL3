@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "Point3d.h"
+#include "Vector3d.h"
 
 class Entity {
 
@@ -29,9 +30,9 @@ public:
 
 	void scale();
 
-	bool isInEntity(int p_Point3d);
+	bool isInEntity(Point3d p);
 
-	bool intersects(int Vector3d_vect);
+	bool intersects(Vector3d vect);
 };
 
 #endif

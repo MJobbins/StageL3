@@ -1,5 +1,6 @@
 #include <cmath>
 #include <string>
+#include <vector>
 #include "Camera.h"
 #include "Point3d.h"
 #include "Vector3d.h"
@@ -27,7 +28,8 @@ m_direction(DEFAULT_DIRECTION),
 m_vertical(DEFAULT_VERTICAL),
 m_horizontal(DEFAULT_HORIZONTAL),
 m_angleV(DEFAULT_ANGLE),
-m_angleH(DEFAULT_ANGLE)
+m_angleH(DEFAULT_ANGLE),
+m_scene(0)
 {}
 
 Camera::Camera(Camera const& source) :
@@ -36,7 +38,8 @@ m_direction(source.m_direction),
 m_vertical(source.m_vertical),
 m_horizontal(source.m_horizontal),
 m_angleV(source.m_angleV),
-m_angleH(source.m_angleH)
+m_angleH(source.m_angleH),
+m_scene(source.m_scene)
 {}
 
 Camera::Camera(Point3d const& p,
@@ -44,13 +47,15 @@ Camera::Camera(Point3d const& p,
         	   Vector3d const& vVer,
         	   Vector3d const& vHor,
         	   float angleV,
-        	   float angleH) :
+        	   float angleH,
+               std::vector<Entity> scene) :
 m_position(p),
 m_direction(vDir),
 m_vertical(vVer),
 m_horizontal(vHor),
 m_angleV(angleV),
-m_angleH(angleH)
+m_angleH(angleH),
+m_scene(scene)
 {}
 
 Camera::~Camera()
@@ -68,6 +73,7 @@ Camera &Camera::operator=(Camera const &source)
     m_horizontal = source.m_horizontal;
     m_angleH = source.m_angleH;
     m_angleV = source.m_angleV;
+    m_scene = source.m_scene;
 
     return *this;
 }
@@ -83,7 +89,8 @@ bool operator==(Camera const& lhs, Camera const& rhs)
            (lhs.m_vertical == rhs.m_vertical) &&
            (lhs.m_horizontal == rhs.m_horizontal) &&
            (lhs.m_angleV == rhs.m_angleV) &&
-           (lhs.m_angleH == rhs.m_angleH);
+           (lhs.m_angleH == rhs.m_angleH) &&
+           (lhs.m_scene == rhs.m_scene);
 }
 
 bool operator!=(Color const& lhs, Color const& rhs)
@@ -149,8 +156,8 @@ void Camera::setHorizontalAngle(float source)
 //Other functions
 //===============
 
-//numberOfRays is the number of rays per pixel. It has to be supérior to 0.
-void Camera::makeImage(int sizeX, int sizeY, int numberOfRays) const
+//numberOfRays is the number of rays per pixel. It has to be superior to 0.
+void Camera::makeImage(int sizeX, int sizeY, int numberOfRays = 1) const
 {
     Image image(sizeX, sizeY);
 
@@ -178,6 +185,12 @@ void Camera::makeImage(int sizeX, int sizeY, int numberOfRays) const
 
 Color Camera::startLaser(Vector3d const& vectDirect) const
 {
+
+    for(int i = 0; i < m_scene.size() ; i++)
+    {
+        if(m_scene[i].intersects(vectDirect) );
+    }
+
     Color c;
     return c;
 }

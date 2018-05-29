@@ -4,6 +4,7 @@
 #include "Point3d.h"
 #include "Vector3d.h"
 #include "Color.h"
+#include "Entity.h"
 
 class Camera {
 
@@ -31,7 +32,8 @@ public:
            Vector3d const& vVert = DEFAULT_VERTICAL,
            Vector3d const& vHor = DEFAULT_HORIZONTAL,
            float angleV = DEFAULT_ANGLE, 
-           float angleH = DEFAULT_ANGLE);
+           float angleH = DEFAULT_ANGLE,
+           std::vector<Entity> scene);
     virtual ~Camera();
 
 
@@ -90,6 +92,8 @@ private:
 
     float m_angleV;
     float m_angleH;
+
+    std::vector<Entity> m_scene;
 };
 
 #endif

@@ -46,12 +46,12 @@ void Entity::scale() {
 	throw "Not yet implemented";
 }
 
-bool Entity::isInEntity(int p_Point3d) {
+bool Entity::isInEntity(Point3d p) {
 	// TODO - implement Entity::isInEntity
 	throw "Not yet implemented";
 }
 
-bool Entity::intersects(int Vector3d_vect) {
+bool Entity::intersects(Vector3d vect) {
 	// TODO - implement Entity::intersects
 	throw "Not yet implemented";
 }
