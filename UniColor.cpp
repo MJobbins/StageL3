@@ -10,3 +10,8 @@ void UniColor::setColor() {
 	// TODO - implement UniColor::setColor
 	throw "Not yet implemented";
 }
+
+Color UniColor::getColor(Point3d p) const
+{
+    return m_color;
+}

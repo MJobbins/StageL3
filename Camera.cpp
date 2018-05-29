@@ -185,12 +185,31 @@ void Camera::makeImage(int sizeX, int sizeY, int numberOfRays = 1) const
 
 Color Camera::startLaser(Vector3d const& vectDirect) const
 {
+    Entity closestEntity;
+    //On la définie en négatif pour que le premier objet touché soit sur d'être le plus proche
+    float distance(-1.0f);
 
     for(int i = 0; i < m_scene.size() ; i++)
     {
-        if(m_scene[i].intersects(vectDirect) );
+        if(m_scene[i].intersects(vectDirect) )
+        {
+            float tmpDist(m_position.distance(m_scene[i].intersectionPoint(vectDirect)));
+
+            if(tmpDist > distance)
+            {
+                distance = tmpDist;
+                closestEntity = m_scene[i];
+            }
+        }
     }
 
-    Color c;
-    return c;
+    //This is all i need for the basic version with no reflection
+    /*
+
+    if(distance == -1.0f)
+    {
+
+    }
+    */
+    return closestEntity.getColor(m_position.distance(closestEntity.intersectionPoint(vectDirect)));
 }

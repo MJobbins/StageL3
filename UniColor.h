@@ -4,7 +4,7 @@
 #include "Optic.h"
 #include "Color.h"
 
-class UniColor : Optic {
+class UniColor : public Optic {
 
 public:
 	Color m_color;
@@ -12,6 +12,8 @@ public:
 	Color getColor();
 
 	void setColor();
+
+	Color getColor(Point3d p) const;
 };
 
 #endif

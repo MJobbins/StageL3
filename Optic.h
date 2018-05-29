@@ -2,6 +2,7 @@
 #define OPTIC_H
 
 #include "Color.h"
+#include "Point3d.h"
 
 class Optic {
 
@@ -20,6 +21,8 @@ public:
 	float getTransparency();
 
 	void getColorDiffuse();
+
+	virtual Color getColor(Point3d p) const = 0 ;
 };
 
 #endif

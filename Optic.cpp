@@ -30,3 +30,4 @@ void Optic::getColorDiffuse() {
 	// TODO - implement Optic::getColorDiffuse
 	throw "Not yet implemented";
 }
+

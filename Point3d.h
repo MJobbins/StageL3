@@ -68,8 +68,8 @@ public :
 	//Other functions
 	//===============
 
-	float distance(Point3d const& source);
-	Point3d middle(Point3d const& source);
+	float distance(Point3d const& source) const;
+	Point3d middle(Point3d const& source) const;
 
 
 private :

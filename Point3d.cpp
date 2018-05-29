@@ -165,15 +165,15 @@ void Point3d::setXYZ(float x, float y, float z)
 //Other functions
 //===============
 
-float Point3d::distance(Point3d const& source)
+float Point3d::distance(Point3d const& source) const
 {
-	return sqrt(
+	return (float)sqrt(
 				pow((source.m_x - m_x), 2) +
 				pow((source.m_y - m_y), 2) +
 				pow((source.m_z - m_z), 2));
 }
 
-Point3d Point3d::middle(Point3d const& source)
+Point3d Point3d::middle(Point3d const& source) const
 {
 	return Point3d((m_x + source.m_x) / 2,
 				   (m_y + source.m_y) / 2,
