@@ -63,5 +63,5 @@ Point3d Entity::intersectionPoint(Vector3d vect) const
 
 Color Entity::getColor(Point3d p) const
 {
-	return m_visual.getColor(p);
+	return m_visual->getColor(p);
 }

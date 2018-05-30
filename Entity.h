@@ -13,8 +13,8 @@ private:
 	Point3d m_rotation;
 	Point3d m_size;
 
-	Geometry m_shape;
-	Optic m_visual;
+	Geometry *m_shape;
+	Optic *m_visual;
 
 public:
 	Point3d getPosition() const;

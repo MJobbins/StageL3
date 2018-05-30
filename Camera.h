@@ -29,11 +29,11 @@ public:
     Camera(Camera const& source);
     Camera(Point3d const& p,
            Vector3d const& vDir,
-           Vector3d const& vVert = DEFAULT_VERTICAL,
-           Vector3d const& vHor = DEFAULT_HORIZONTAL,
-           float angleV = DEFAULT_ANGLE, 
-           float angleH = DEFAULT_ANGLE,
-           std::vector<Entity> scene);
+           Vector3d const& vVert,
+           Vector3d const& vHor,
+           float angleV,
+           float angleH,
+           std::vector<Entity> const& scene);
     virtual ~Camera();
 
 
@@ -93,7 +93,7 @@ private:
     float m_angleV;
     float m_angleH;
 
-    std::vector<Entity> m_scene;
+    const std::vector<Entity>* m_scene;
 };
 
 #endif

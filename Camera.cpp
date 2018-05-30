@@ -29,7 +29,7 @@ m_vertical(DEFAULT_VERTICAL),
 m_horizontal(DEFAULT_HORIZONTAL),
 m_angleV(DEFAULT_ANGLE),
 m_angleH(DEFAULT_ANGLE),
-m_scene(0)
+m_scene(nullptr)
 {}
 
 Camera::Camera(Camera const& source) :
@@ -48,18 +48,22 @@ Camera::Camera(Point3d const& p,
         	   Vector3d const& vHor,
         	   float angleV,
         	   float angleH,
-               std::vector<Entity> scene) :
+               std::vector<Entity> const& scene) :
 m_position(p),
 m_direction(vDir),
 m_vertical(vVer),
 m_horizontal(vHor),
 m_angleV(angleV),
 m_angleH(angleH),
-m_scene(scene)
-{}
+m_scene(nullptr)
+{
+    m_scene = &scene;
+}
 
 Camera::~Camera()
-{}
+{
+
+}
 
 
 //Assignement operators
@@ -93,7 +97,7 @@ bool operator==(Camera const& lhs, Camera const& rhs)
            (lhs.m_scene == rhs.m_scene);
 }
 
-bool operator!=(Color const& lhs, Color const& rhs)
+bool operator!=(Camera const& lhs, Camera const& rhs)
 {
     return !(lhs == rhs);
 }
@@ -189,16 +193,16 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
     //On la définie en négatif pour que le premier objet touché soit sur d'être le plus proche
     float distance(-1.0f);
 
-    for(int i = 0; i < m_scene.size() ; i++)
+    for(int i = 0; i < m_scene->size() ; i++)
     {
-        if(m_scene[i].intersects(vectDirect) )
+        if(m_scene->at(i).intersects(vectDirect) )
         {
-            float tmpDist(m_position.distance(m_scene[i].intersectionPoint(vectDirect)));
+            float tmpDist(m_position.distance(m_scene->at(i).intersectionPoint(vectDirect)));
 
             if(tmpDist > distance)
             {
                 distance = tmpDist;
-                closestEntity = m_scene[i];
+                closestEntity = m_scene->at(i);
             }
         }
     }
