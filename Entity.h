@@ -5,29 +5,60 @@
 #include "Vector3d.h"
 #include "Geometry.h"
 #include "Optic.h"
+#include "Ray.h"
 
 class Entity {
 
-private:
-	Point3d m_position;
-	Point3d m_rotation;
-	Point3d m_size;
-
-	Geometry *m_shape;
-	Optic *m_visual;
 
 public:
+
+    /*****************
+    **    METHODES
+    ******************/
+
+    //Constructors & destructors
+    //==========================
+
+    Entity();
+    Entity(Entity const& source);
+    Entity(Geometry &shape, Optic &view);
+    Entity(Geometry &shape, Optic &view,
+           Point3d const& position = Point3d(0.0f, 0.0f, 0.0f),
+           Point3d const& rotation = Point3d(0.0f, 0.0f, 0.0f),
+           float scale = 1.0f);
+    ~Entity();
+
+    //Assignement operators
+    //=====================
+
+    Entity& operator=(Entity const& source);
+
+
+    //Comparison operators
+    //====================
+
+    friend bool operator==(Entity const& lhs, Entity const& rhs);
+    friend bool operator!=(Entity const& lhs, Entity const& rhs);
+
+
+    //Setters and Getters
+    //===================
+
 	Point3d getPosition() const;
 
-	void setPosition(Point3d m_position);
+	void setPosition(Point3d position);
 
 	Point3d getRotation() const;
 
-	void setRotation();
+	void setRotation(Point3d rotation);
 
-	Point3d getSize() const;
+	float getSize() const;
 
-	void setSize();
+	void setSize(float size);
+	
+
+    //Other functions
+    //===============
 
 	void translate();
 
@@ -37,11 +68,24 @@ public:
 
 	bool isInEntity(Point3d p) const;
 
-	bool intersects(Vector3d vect) const;
+	bool intersects(Ray ray) const;
 
-	Point3d intersectionPoint(Vector3d vect) const;
+	Point3d intersectionPoint(Ray ray) const;
 
 	Color getColor(Point3d p) const;
+
+private:
+
+    /*****************
+    **    ATTRIBUTS
+    ******************/
+
+    Point3d m_position;
+    Point3d m_rotation;
+    float m_size;
+
+    Geometry *m_shape;
+    Optic *m_visual;
 };
 
 #endif

@@ -190,19 +190,20 @@ void Camera::makeImage(int sizeX, int sizeY, int numberOfRays = 1) const
 Color Camera::startLaser(Vector3d const& vectDirect) const
 {
     Entity closestEntity;
+
     //On la définie en négatif pour que le premier objet touché soit sur d'être le plus proche
     float distance(-1.0f);
+    Ray rayOP(m_position, vectDirect, Color(1.0f));
 
-    for(int i = 0; i < m_scene->size() ; i++)
-    {
-        if(m_scene->at(i).intersects(vectDirect) )
+    for (const auto &i : *m_scene) {
+        if(i.intersects(rayOP) )
         {
-            float tmpDist(m_position.distance(m_scene->at(i).intersectionPoint(vectDirect)));
+            float tmpDist(m_position.distance(i.intersectionPoint(rayOP)));
 
             if(tmpDist > distance)
             {
                 distance = tmpDist;
-                closestEntity = m_scene->at(i);
+                closestEntity = i;
             }
         }
     }
@@ -215,5 +216,5 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
 
     }
     */
-    return closestEntity.getColor(m_position.distance(closestEntity.intersectionPoint(vectDirect)));
+    return closestEntity.getColor(m_position.distance(closestEntity.intersectionPoint(rayOP)));
 }

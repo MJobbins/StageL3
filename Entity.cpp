@@ -1,14 +1,91 @@
 #include "Entity.h"
 #include "Point3d.h"
 
-Point3d Entity::getPosition() const{
-	// TODO - implement Entity::getPosition
-	throw "Not yet implemented";
+
+//Constructors & destructors
+//==========================
+
+
+Entity::Entity() :
+m_position(Point3d::ZERO),
+m_rotation(Point3d::ZERO),
+m_size(1.0f),
+m_shape(nullptr),
+m_visual(nullptr)
+{}
+
+Entity::Entity(Entity const &source) :
+m_position(source.m_position),
+m_rotation(source.m_rotation),
+m_size(source.m_size),
+m_shape(source.m_shape),
+m_visual(source.m_visual)
+{
+
 }
 
-void Entity::setPosition(Point3d m_position) {
-	// TODO - implement Entity::setPosition
-	throw "Not yet implemented";
+Entity::Entity(Geometry &shape, Optic &view) :
+m_position(Point3d::ZERO),
+m_rotation(Point3d::ZERO),
+m_size(1.0f),
+m_shape(&shape),
+m_visual(&view)
+{}
+
+Entity::Entity(Geometry &shape, Optic &view, Point3d const& position, Point3d const& rotation, float scale) :
+m_position(position),
+m_rotation(rotation),
+m_size(scale),
+m_shape(&shape),
+m_visual(&view)
+{}
+
+Entity::~Entity()
+{}
+
+//Assignement operators
+//=====================
+
+
+Entity& Entity::operator=(Entity const &source)
+{
+    m_position = source.m_position;
+    m_rotation = source.m_rotation;
+    m_size = source.m_size;
+    m_shape = source.m_shape;
+    m_visual = source.m_visual;
+
+    return(*this);
+}
+
+//Comparison operators
+//====================
+
+
+bool operator==(Entity const &lhs, Entity const &rhs)
+{
+    return (lhs.m_position == rhs.m_position) &&
+           (lhs.m_rotation == rhs.m_rotation) &&
+           (lhs.m_size == rhs.m_size) &&
+           (lhs.m_shape == rhs.m_shape) &&
+           (lhs.m_visual == rhs.m_visual);
+}
+
+bool operator!=(Entity const &lhs, Entity const &rhs)
+{
+    return !(lhs == rhs);
+}
+
+//Setters and Getters
+//===================
+
+
+Point3d Entity::getPosition() const{
+	return m_position;
+}
+
+void Entity::setPosition(Point3d position) {
+	m_position = position;
 }
 
 Point3d Entity::getRotation() const{
@@ -16,20 +93,24 @@ Point3d Entity::getRotation() const{
 	throw "Not yet implemented";
 }
 
-void Entity::setRotation() {
+void Entity::setRotation(Point3d rotation) {
 	// TODO - implement Entity::setRotation
 	throw "Not yet implemented";
 }
 
-Point3d Entity::getSize() const{
+float Entity::getSize() const{
 	// TODO - implement Entity::getSize
 	throw "Not yet implemented";
 }
 
-void Entity::setSize() {
+void Entity::setSize(float size) {
 	// TODO - implement Entity::setSize
 	throw "Not yet implemented";
 }
+
+//Other functions
+//===============
+
 
 void Entity::translate() {
 	// TODO - implement Entity::translate
@@ -51,12 +132,12 @@ bool Entity::isInEntity(Point3d p) const{
 	throw "Not yet implemented";
 }
 
-bool Entity::intersects(Vector3d vect) const{
+bool Entity::intersects(Ray ray) const{
 	// TODO - implement Entity::intersects
 	throw "Not yet implemented";
 }
 
-Point3d Entity::intersectionPoint(Vector3d vect) const
+Point3d Entity::intersectionPoint(Ray ray) const
 {
 	return Point3d();
 }
@@ -65,3 +146,7 @@ Color Entity::getColor(Point3d p) const
 {
 	return m_visual->getColor(p);
 }
+
+
+
+
