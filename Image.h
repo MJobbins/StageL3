@@ -29,9 +29,9 @@ public:
     //Setters and Getters
     //===================
 
-	int getSizeX();
+	int getSizeX() const;
 
-	int getSizeY();
+	int getSizeY() const;
 
 	Color getColor(int x, int y) const;
 
@@ -47,7 +47,8 @@ public:
 
 	int pixelBlueToPPM(int x, int y);
 
-	void saveImage(std::string name);
+    void saveImage(std::string name);
+    void saveImageBis(std::string name);
 
 private:
 

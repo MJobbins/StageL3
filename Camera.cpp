@@ -1,11 +1,14 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "Camera.h"
 #include "Point3d.h"
 #include "Vector3d.h"
 #include "Color.h"
 #include "Image.h"
+#include "Sphere.h"
+#include "UniColor.h"
 
 //Static default values
 const Point3d Camera::DEFAULT_POSITION(Point3d::ZERO);
@@ -48,16 +51,16 @@ Camera::Camera(Point3d const& p,
         	   Vector3d const& vHor,
         	   float angleV,
         	   float angleH,
-               std::vector<Entity> const& scene) :
+               std::vector<Entity*> const& scene) :
 m_position(p),
 m_direction(vDir),
 m_vertical(vVer),
 m_horizontal(vHor),
-m_angleV(angleV),
-m_angleH(angleH),
-m_scene(nullptr)
+m_angleV(angleV / 360.0f * 2.0f * (float)M_PI),
+m_angleH(angleH / 360.0f * 2.0f * (float)M_PI),
+m_scene(&scene)
 {
-    m_scene = &scene;
+    //m_scene = &scene;
 }
 
 Camera::~Camera()
@@ -179,29 +182,36 @@ void Camera::makeImage(int sizeX, int sizeY, int numberOfRays = 1) const
                 rayOP += p.getX() * tan(m_angleH) * m_horizontal;
                 rayOP += p.getY() * tan(m_angleV) * m_vertical;
 
+                rayOP.normalize();
+
                 Color pixelColor = startLaser(rayOP);
 
                 image.setColor(i, j, pixelColor);
             }
         }
     }
+    image.saveImageBis(std::string("test1.ppm"));
 }
 
 Color Camera::startLaser(Vector3d const& vectDirect) const
 {
-    Entity closestEntity;
+    Entity *closestEntity = nullptr;
 
     //On la définie en négatif pour que le premier objet touché soit sur d'être le plus proche
-    float distance(-1.0f);
+    float distance;
+    bool distanceDefined = false;
+
     Ray rayOP(m_position, vectDirect, Color(1.0f));
 
     for (const auto &i : *m_scene) {
-        if(i.intersects(rayOP) )
-        {
-            float tmpDist(m_position.distance(i.intersectionPoint(rayOP)));
 
-            if(tmpDist > distance)
+        if(i->intersects(rayOP) )
+        {
+            float tmpDist(m_position.distance(i->intersectionPoint(rayOP)));
+
+            if(!distanceDefined || tmpDist < distance)
             {
+                distanceDefined = true;
                 distance = tmpDist;
                 closestEntity = i;
             }
@@ -216,5 +226,30 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
 
     }
     */
-    return closestEntity.getColor(m_position.distance(closestEntity.intersectionPoint(rayOP)));
+    if(closestEntity == nullptr)
+        return Color::BLACK;
+    else
+        return closestEntity->getColor(m_position.distance(closestEntity->intersectionPoint(rayOP)));
+}
+
+int main()
+{
+
+    Sphere sphere(2);
+    UniColor uc(Color::GREEN);
+    Entity entite1(sphere, uc, Point3d(11.0f, 9.0f, 0.0f));
+
+    Sphere sphere2(1);
+    UniColor uc2(Color::MAGENTA);
+    Entity entite2(sphere2, uc2, Point3d(8.0f, 0.0f, 0.0f));
+
+    std::vector<Entity*> tableau;
+    tableau.push_back(&entite1);
+    tableau.push_back(&entite2);
+
+    Camera mainCamera(Point3d::ZERO, Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);
+
+    mainCamera.makeImage(400, 400, 1);
+
+    return 0;
 }

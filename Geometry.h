@@ -1,13 +1,19 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include "Ray.h"
+
 class Geometry {
 
 
 public:
+
 	virtual ~Geometry() = 0;
 
-	bool intersection(int Rayon_ray, int Hit_h, int float_distMax, int float_distMin);
+	virtual bool intersects(Ray const& ray, Point3d const& position) const = 0;
+	virtual Point3d intersectionPoint(Ray const& ray, Point3d const& position) const = 0;
+
+
 };
 
 #endif

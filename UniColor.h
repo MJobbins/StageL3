@@ -7,13 +7,21 @@
 class UniColor : public Optic {
 
 public:
-	Color m_color;
+
+    UniColor();
+    UniColor(Color const& c);
+
+
 
 	Color getColor();
 
 	void setColor();
 
 	Color getColor(Point3d p) const;
+
+private:
+
+	Color m_color;
 };
 
 #endif

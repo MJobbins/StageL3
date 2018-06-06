@@ -1,6 +1,8 @@
 #ifndef VECTOR3D_H
 #define VECTOR3D_H
 
+#include "Point3d.h"
+
 class Vector3d
 {
 public :
@@ -19,6 +21,7 @@ public :
 
 	Vector3d();
 	Vector3d(Vector3d const& source);
+	Vector3d(Point3d const& a, Point3d const& b);
 	Vector3d(float x, float y, float z);
 
 	virtual ~Vector3d();
@@ -74,6 +77,8 @@ public :
 	//===============
 
 	float length() const;
+	void normalize();
+	friend float produitScalaire(Vector3d const& lhs, Vector3d const & rhs);
 
 	
 private :

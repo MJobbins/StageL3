@@ -5,12 +5,59 @@
 
 class Sphere : public Geometry {
 
-public:
+public :
+
+    static const float DEFAULT_RAYON;
+
+    /*****************
+    **    METHODES
+    ******************/
+
+    //Constructors & destructors
+    //==========================
+
+    Sphere();
+    Sphere(Sphere const& source);
+    explicit Sphere(float rayon);
+
+    ~Sphere();
+
+
+    //Assignement operators
+    //=====================
+
+    Sphere& operator=(Sphere const& source);
+
+
+    //Comparison operators
+    //====================
+
+    friend bool operator==(Sphere const& lhs, Sphere const& rhs);
+    friend  bool operator!=(Sphere const& lhs, Sphere const& rhs);
+
+
+    //Setters and Getters
+    //===================
+
+    void getRayon();
+
+    void setRayon();
+
+
+    //Other functions
+    //===============
+
+    bool intersects(Ray const& ray, Point3d const& position) const;
+    Point3d intersectionPoint(Ray const& ray, Point3d const& position) const;
+
+private :
+
+    /*****************
+    **    ATTRIBUTS
+    ******************/
+
 	float m_rayon;
 
-	void getRayon();
-
-	void setRayon();
 };
 
 #endif

@@ -55,7 +55,7 @@ public:
 	float getSize() const;
 
 	void setSize(float size);
-	
+
 
     //Other functions
     //===============
@@ -68,9 +68,9 @@ public:
 
 	bool isInEntity(Point3d p) const;
 
-	bool intersects(Ray ray) const;
+	bool intersects(Ray const& ray) const;
 
-	Point3d intersectionPoint(Ray ray) const;
+	Point3d intersectionPoint(Ray const& ray) const;
 
 	Color getColor(Point3d p) const;
 

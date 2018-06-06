@@ -89,23 +89,19 @@ void Entity::setPosition(Point3d position) {
 }
 
 Point3d Entity::getRotation() const{
-	// TODO - implement Entity::getRotation
-	throw "Not yet implemented";
+	return m_rotation;
 }
 
 void Entity::setRotation(Point3d rotation) {
-	// TODO - implement Entity::setRotation
-	throw "Not yet implemented";
+	m_rotation = rotation;
 }
 
 float Entity::getSize() const{
-	// TODO - implement Entity::getSize
-	throw "Not yet implemented";
+	return m_size;
 }
 
 void Entity::setSize(float size) {
-	// TODO - implement Entity::setSize
-	throw "Not yet implemented";
+	m_size = size;
 }
 
 //Other functions
@@ -132,14 +128,13 @@ bool Entity::isInEntity(Point3d p) const{
 	throw "Not yet implemented";
 }
 
-bool Entity::intersects(Ray ray) const{
-	// TODO - implement Entity::intersects
-	throw "Not yet implemented";
+bool Entity::intersects(Ray const& ray) const{
+	return this->m_shape->intersects(ray, m_position);
 }
 
-Point3d Entity::intersectionPoint(Ray ray) const
+Point3d Entity::intersectionPoint(Ray const& ray) const
 {
-	return Point3d();
+	return this->m_shape->intersectionPoint(ray, m_position);
 }
 
 Color Entity::getColor(Point3d p) const

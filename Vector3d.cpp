@@ -22,6 +22,12 @@ m_y(source.m_y),
 m_z(source.m_z)
 {}
 
+Vector3d::Vector3d(Point3d const &a, Point3d const &b) :
+        m_x(b.getX() - a.getY()),
+        m_y(b.getY() - a.getY()),
+        m_z(b.getZ() - a.getZ())
+{}
+
 Vector3d::Vector3d(float x, float y, float z) :
 m_x(x),
 m_y(y),
@@ -220,8 +226,25 @@ void Vector3d::setXYZ(float x, float y, float z)
 
 float Vector3d::length() const
 {
-	return sqrt( 
+	return (float)sqrt(
 		pow(m_x, 2) + 
-		pow(m_y, 2) + 
+		pow(m_y, 2) +
 		pow(m_z, 2));
 }
+
+void Vector3d::normalize()
+{
+    float length = this->length();
+    m_x /= length;
+    m_y /= length;
+    m_z /= length;
+}
+
+float produitScalaire(Vector3d const &lhs, Vector3d const &rhs)
+{
+	return lhs.m_x * rhs.m_x + lhs.m_y * rhs.m_y + lhs.m_z * rhs.m_z;
+}
+
+
+
+

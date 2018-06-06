@@ -13,6 +13,7 @@ private:
 	Vector3d m_normal;
 	float m_u;
 	float m_v;
+	float m_distance;
 
 public:
 	Entity getEntity();

@@ -33,7 +33,7 @@ public:
     //===================
 
 	Point3d getOrigin() const;
-	void getOrigin(Point3d const& source);
+	void setOrigin(Point3d const& source);
 
 	Vector3d getDirection() const;
 	void setDirection(Vector3d const& source);
