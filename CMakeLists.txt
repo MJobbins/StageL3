@@ -33,4 +33,4 @@ add_executable(RayTracing
         UniColor.cpp
         UniColor.h
         Vector3d.cpp
-        Vector3d.h)
+        Vector3d.h SpotLight.cpp SpotLight.h)

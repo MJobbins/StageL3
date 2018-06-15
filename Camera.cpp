@@ -10,6 +10,7 @@
 #include "Sphere.h"
 #include "UniColor.h"
 #include "Hit.h"
+#include "Texture.h"
 
 //Static default values
 const Point3d Camera::DEFAULT_POSITION(Point3d::ZERO);
@@ -220,19 +221,15 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
         }
     }
 
-    //This is all i need for the basic version with no reflection
-    /*
-
-    if(distance == -1.0f)
-    {
-
-    }
-    */
     if(!closestHit.getHit()) {
         return Color::BLACK; //Pour le moment noir, lorsqu'on auras de
         //La lumière il faudras mettre la couleur de la lumière
     }
     else {
+
+        //CETTE PARTIE VA GERER LA REFLECTION
+        if(closestHit.getEntity())
+
         return closestHit.getEntity().getColor(closestHit.getU(), closestHit.getV());
     }
 }
@@ -240,9 +237,10 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
 int main()
 {
 
-    Sphere sphere(40);
+    Sphere sphere(1000);
     UniColor uc(Color::GREEN);
-    Entity entite1(sphere, uc, Point3d(100.0f, 50.0f, 50.0f));
+    Texture texture("../Textures/earth.ppm");
+    Entity entite1(sphere, texture, Point3d(1800.0f, 50.0f, 50.0f));
 
     Sphere sphere2(1);
     UniColor uc2(Color::MAGENTA);
@@ -254,7 +252,7 @@ int main()
 
     Camera mainCamera(Point3d::ZERO, Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);
 
-    mainCamera.makeImage(2000, 1000, 1);
+    mainCamera.makeImage(600, 600, 1);
 
     return 0;
 }

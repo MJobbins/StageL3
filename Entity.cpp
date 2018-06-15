@@ -135,7 +135,15 @@ bool Entity::intersects(Ray const& ray, Hit &hit) const{
 
 Color Entity::getColor(float u, float v) const
 {
-	return m_visual->getColor(u, v);
+	Color colorOnPoint(m_visual->getColor(u, v));
+
+	if(m_visual->getMirror() > 0)
+	{
+        //Code à ajouter pour l'effet de reflection.
+	    return colorOnPoint;
+	}
+	else
+	    return colorOnPoint;
 }
 
 

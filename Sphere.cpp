@@ -115,14 +115,14 @@ bool Sphere::intersects(Ray const& ray, Point3d const& position, Hit &hit) const
             hit.setU(theta);
         else
             hit.setU(1 - theta);
-    */
 
+*/
         //V2 TRY
         float u = 0.5f + ((atan2f(Vp.getX(), Vp.getZ()))/ (2.0F * PI_F));
         float v = 0.5f - (asinf(Vp.getY())/ PI_F);
 
         //V3 TRY
-        /*float tempV = acosf(Vp.getZ());
+       /* float tempV = acosf(Vp.getZ());
         float tempU = atan2f(Vp.getY(), Vp.getX());
 
         if(tempU < 0)
@@ -130,10 +130,9 @@ bool Sphere::intersects(Ray const& ray, Point3d const& position, Hit &hit) const
 
         float u = tempU / (2*PI_F);
         float v = tempV/PI_F;
-*/
+    */
         hit.setU(u);
         hit.setV(v);
-
     }
 
     return hit.getHit();

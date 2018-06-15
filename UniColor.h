@@ -8,14 +8,28 @@ class UniColor : public Optic {
 
 public:
 
+	/*****************
+    **    METHODES
+    ******************/
+
+	//Constructors & destructors
+	//==========================
+
     UniColor();
-    UniColor(Color const& c);
+    explicit UniColor(Color const& c);
+    ~UniColor();
 
 
+    //Setters and Getters
+    //===================
 
-	Color getColor();
+	Color getColor() const;
 
-	void setColor();
+	void setColor(Color const& color);
+
+
+    //Function from parent class
+    //==========================
 
 	Color getColor(float u, float v) const;
 

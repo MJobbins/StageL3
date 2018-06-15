@@ -6,6 +6,13 @@
 const int Image::DEFAULT_WIDTH(640);
 const int Image::DEFAULT_HEIGHT(360);
 
+/*****************
+**    METHODES
+******************/
+
+//Constructors & destructors
+//==========================
+
 Image::Image() :
 		m_tab(nullptr),
 		m_width(Image::DEFAULT_WIDTH),
@@ -28,6 +35,10 @@ Image::~Image()
     delete[] m_tab;
 }
 
+
+//Setters and Getters
+//===================
+
 int Image::getWidth() const
 {
 	return m_width;
@@ -47,6 +58,10 @@ void Image::setColor(int w, int h, Color color)
 {
     m_tab[h * (m_width) + w].setColor(color);
 }
+
+
+//Other functions
+//===============
 
 int Image::pixelRedToPPM(int w, int h)
 {
@@ -117,26 +132,3 @@ void Image::saveImageBis(std::string name)
     }
     fclose(file);
 }
-
-
-/*
-int main()
-{
-    Image image;
-
-    Color testCol(Color::RED);
-
-    for(int i = 0; i < image.getSizeX(); i++)
-    {
-    	for(int j = 0; j < image.getSizeY(); j++)
-    	{
-    	    image.setColor(i, j, Color(0.9f, 0.4f, 0.9f));
-    	}
-    }
-
-    image.saveImage("try.ppm");
-    image.saveImageBis("tryBis.ppm");
-
-    return 0;
-}
- */

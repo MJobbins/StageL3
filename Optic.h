@@ -10,6 +10,9 @@ private:
 	float m_mirror;
 
 public:
+
+	virtual ~Optic() = 0;
+
 	float getMirror();
 
 	void setMirror();
@@ -22,7 +25,7 @@ public:
 
 	void getColorDiffuse();
 
-	virtual Color getColor(float u, float v) const = 0 ;
+	virtual Color getColor(float u, float v) = 0;
 };
 
 #endif
