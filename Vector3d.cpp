@@ -70,9 +70,13 @@ Vector3d & Vector3d::operator-=(Vector3d const& source)
 
 Vector3d & Vector3d::operator*=(Vector3d const& source)
 {
-	m_x *= source.m_x;
-	m_y *= source.m_y;
-	m_z *= source.m_z;
+    float tmpX = m_y*source.getZ() - m_z*source.getY();
+    float tmpY = m_x*source.getZ() - m_z*source.getX();
+    float tmpZ = m_x*source.getY() - m_y*source.getX();
+
+	m_x = tmpX;
+	m_y = tmpY;
+	m_z = tmpZ;
 
 	return *this;
 }
@@ -181,6 +185,15 @@ Vector3d operator/(float lhs, Vector3d const& rhs)
 }
 
 
+float operator^(Vector3d const &lhs, Vector3d const &rhs)
+{
+	return lhs.m_x * rhs.m_x + lhs.m_y * rhs.m_y + lhs.m_z * rhs.m_z;
+}
+
+
+
+
+
 //Getters et setters
 //==================
 
@@ -244,7 +257,5 @@ float produitScalaire(Vector3d const &lhs, Vector3d const &rhs)
 {
 	return lhs.m_x * rhs.m_x + lhs.m_y * rhs.m_y + lhs.m_z * rhs.m_z;
 }
-
-
 
 

@@ -1,8 +1,10 @@
-#include <mach/mig_errors.h>
 #include <cmath>
+#include <iostream>
 #include "Sphere.h"
+#include "Hit.h"
 
 const float Sphere::DEFAULT_RAYON (0.0f);
+const float  PI_F=3.14159265358979f;
 
 
 //Constructors & destructors
@@ -65,33 +67,75 @@ void Sphere::setRayon() {
 //Other functions
 //===============
 
-bool Sphere::intersects(Ray const& ray, Point3d const& position) const
+bool Sphere::intersects(Ray const& ray, Point3d const& position, Hit &hit) const
 {
 	Vector3d d = ray.getDirection();
 	Vector3d OC = Vector3d(ray.getOrigin(), position);
 	float k = produitScalaire(d , OC);
 	if(k < 0) {
+	    hit.setHit(false);
 	    return false;
 	}
 	float h2 = produitScalaire(OC, OC) - k*k;
-
-	return h2 <= m_rayon*m_rayon;
-}
-
-Point3d Sphere::intersectionPoint(Ray const& ray, Point3d const& position) const
-{
-    Vector3d d = ray.getDirection();
-    Vector3d OC = Vector3d(ray.getOrigin(), position);
-    float k = produitScalaire(d , OC);
-    float h2 = produitScalaire(OC, OC) - k*k;
 
     float delta = sqrt(m_rayon*m_rayon - h2);
 
     Vector3d OP1 = (k-delta) * d;
 
-    return Point3d( ray.getOrigin().getX() + OP1.getX(),
-                    ray.getOrigin().getY() + OP1.getY(),
-                    ray.getOrigin().getZ() + OP1.getZ()
-                    );
+    hit.setPtIntersection(Point3d( ray.getOrigin().getX() + OP1.getX(),
+                                   ray.getOrigin().getY() + OP1.getY(),
+                                   ray.getOrigin().getZ() + OP1.getZ()
+    ));
+
+    hit.setHit(h2 <= m_rayon*m_rayon);
+    if(hit.getHit()) {
+        hit.setDistance(position.distance(hit.getPtIntersection()));
+        hit.setNormal(Vector3d(position, hit.getPtIntersection()));
+
+        // CALCUL DE U ET V, A PLACER DANS UNE AUTRE FONCTION
+        //Vector3d Vn(0, 0, m_rayon);
+        //Vector3d Ve(0, m_rayon, 0);
+        //Vector3d Vp(position, hit.getPtIntersection());
+        //Vp.normalize();
+
+        //TEST FOR U AND V 2nd
+        Vector3d Vp(hit.getPtIntersection(),position );
+        Vp.normalize();
+
+    /*
+        float phi = acosf(-(Vn ^ Vp));
+        hit.setV(phi / PI_F);
+        //std::cout<< "phi : " << phi/PI_F << std::endl;
+
+        float theta = ((acosf((Vp ^ Ve) / sinf(phi))) / (2.0f * PI_F));
+
+        //std::cout << "theta : " << theta << std::endl;
+
+        if (((Vn * Ve) ^ Vp) > 0.0f)
+            hit.setU(theta);
+        else
+            hit.setU(1 - theta);
+    */
+
+        //V2 TRY
+        float u = 0.5f + ((atan2f(Vp.getX(), Vp.getZ()))/ (2.0F * PI_F));
+        float v = 0.5f - (asinf(Vp.getY())/ PI_F);
+
+        //V3 TRY
+        /*float tempV = acosf(Vp.getZ());
+        float tempU = atan2f(Vp.getY(), Vp.getX());
+
+        if(tempU < 0)
+            tempU += (2*PI_F);
+
+        float u = tempU / (2*PI_F);
+        float v = tempV/PI_F;
+*/
+        hit.setU(u);
+        hit.setV(v);
+
+    }
+
+    return hit.getHit();
 }
 

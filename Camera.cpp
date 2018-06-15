@@ -9,6 +9,7 @@
 #include "Image.h"
 #include "Sphere.h"
 #include "UniColor.h"
+#include "Hit.h"
 
 //Static default values
 const Point3d Camera::DEFAULT_POSITION(Point3d::ZERO);
@@ -164,18 +165,18 @@ void Camera::setHorizontalAngle(float source)
 //===============
 
 //numberOfRays is the number of rays per pixel. It has to be superior to 0.
-void Camera::makeImage(int sizeX, int sizeY, int numberOfRays = 1) const
+void Camera::makeImage(int width, int height, int numberOfRays = 1) const
 {
-    Image image(sizeX, sizeY);
+    Image image(width, height);
 
-    for(int i = 0; i < sizeX; i++)
+    for(int i = 0; i < height; i++)
     {
-        for(int j = 0; j < sizeY; j++)
+        for(int j = 0; j < width; j++)
         {
-            for(int k = 0; k < numberOfRays; k++)
+            for(int k = 0; k < numberOfRays; k++) //Pour de l'anti aliasing, et plus de précision.
             {
-                Point3d p( (( (i * 2.0f) / sizeX) - 1.0f),
-                           (( (j * 2.0f) / sizeY) - 1.0f),
+                Point3d p( (( (i * 2.0f) / height) - 1.0f),
+                           (( (j * 2.0f) / width) - 1.0f),
                            0.0f );
 
                 Vector3d rayOP(m_direction);
@@ -195,25 +196,26 @@ void Camera::makeImage(int sizeX, int sizeY, int numberOfRays = 1) const
 
 Color Camera::startLaser(Vector3d const& vectDirect) const
 {
-    Entity *closestEntity = nullptr;
-
-    //On la définie en négatif pour que le premier objet touché soit sur d'être le plus proche
-    float distance;
-    bool distanceDefined = false;
+    Hit closestHit; // Ce sera notre hit final.
 
     Ray rayOP(m_position, vectDirect, Color(1.0f));
 
     for (const auto &i : *m_scene) {
 
-        if(i->intersects(rayOP) )
-        {
-            float tmpDist(m_position.distance(i->intersectionPoint(rayOP)));
+        Hit currentHit;
+        currentHit.setEntity(*i);
 
-            if(!distanceDefined || tmpDist < distance)
+        if(i->intersects(rayOP, currentHit))
+        {
+            if(!closestHit.getHit())
             {
-                distanceDefined = true;
-                distance = tmpDist;
-                closestEntity = i;
+                //std::cout << "premier" << std::endl;
+                closestHit = currentHit;
+            }
+            else
+            {
+                if(closestHit.getDistance() > currentHit.getDistance())
+                    closestHit = currentHit;
             }
         }
     }
@@ -226,18 +228,21 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
 
     }
     */
-    if(closestEntity == nullptr)
-        return Color::BLACK;
-    else
-        return closestEntity->getColor(m_position.distance(closestEntity->intersectionPoint(rayOP)));
+    if(!closestHit.getHit()) {
+        return Color::BLACK; //Pour le moment noir, lorsqu'on auras de
+        //La lumière il faudras mettre la couleur de la lumière
+    }
+    else {
+        return closestHit.getEntity().getColor(closestHit.getU(), closestHit.getV());
+    }
 }
 
 int main()
 {
 
-    Sphere sphere(2);
+    Sphere sphere(40);
     UniColor uc(Color::GREEN);
-    Entity entite1(sphere, uc, Point3d(11.0f, 9.0f, 0.0f));
+    Entity entite1(sphere, uc, Point3d(100.0f, 50.0f, 50.0f));
 
     Sphere sphere2(1);
     UniColor uc2(Color::MAGENTA);
@@ -249,7 +254,7 @@ int main()
 
     Camera mainCamera(Point3d::ZERO, Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);
 
-    mainCamera.makeImage(400, 400, 1);
+    mainCamera.makeImage(2000, 1000, 1);
 
     return 0;
 }

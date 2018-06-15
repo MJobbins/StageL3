@@ -128,18 +128,14 @@ bool Entity::isInEntity(Point3d p) const{
 	throw "Not yet implemented";
 }
 
-bool Entity::intersects(Ray const& ray) const{
-	return this->m_shape->intersects(ray, m_position);
+bool Entity::intersects(Ray const& ray, Hit &hit) const{
+	return this->m_shape->intersects(ray, m_position, hit);
 }
 
-Point3d Entity::intersectionPoint(Ray const& ray) const
-{
-	return this->m_shape->intersectionPoint(ray, m_position);
-}
 
-Color Entity::getColor(Point3d p) const
+Color Entity::getColor(float u, float v) const
 {
-	return m_visual->getColor(p);
+	return m_visual->getColor(u, v);
 }
 
 

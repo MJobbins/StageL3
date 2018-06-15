@@ -17,7 +17,7 @@ public:
 
 	void setColor();
 
-	Color getColor(Point3d p) const;
+	Color getColor(float u, float v) const;
 
 private:
 

@@ -68,11 +68,9 @@ public:
 
 	bool isInEntity(Point3d p) const;
 
-	bool intersects(Ray const& ray) const;
+	bool intersects(Ray const& ray, Hit &hit) const;
 
-	Point3d intersectionPoint(Ray const& ray) const;
-
-	Color getColor(Point3d p) const;
+	Color getColor(float u, float v) const;
 
 private:
 

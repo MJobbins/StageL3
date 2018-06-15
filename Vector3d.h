@@ -57,6 +57,7 @@ public :
 	friend Vector3d operator*(Vector3d const& lhs, float rhs);
 	friend Vector3d operator/(Vector3d const& lhs, float f);
 	friend Vector3d operator/(float lhs, Vector3d const& rhs);
+	friend float operator^(Vector3d const& lhs, Vector3d const& rhs);
 
 	
 	//Getters et setters

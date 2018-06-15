@@ -3,24 +3,24 @@
 #include <iostream>
 #include "Image.h"
 
-const int Image::DEFAULT_SIZE_X(640);
-const int Image::DEFAULT_SIZE_Y(360);
+const int Image::DEFAULT_WIDTH(640);
+const int Image::DEFAULT_HEIGHT(360);
 
 Image::Image() :
 		m_tab(nullptr),
-		m_sizeX(Image::DEFAULT_SIZE_X),
-		m_sizeY(Image::DEFAULT_SIZE_Y)
+		m_width(Image::DEFAULT_WIDTH),
+		m_height(Image::DEFAULT_HEIGHT)
 {
     //Nous traiterons ce tableau comme un 2d
-    m_tab = new Color[m_sizeX * m_sizeY];
+    m_tab = new Color[m_width * m_height];
 }
 
-Image::Image(int sizeX, int sizeY):
+Image::Image(int width, int height):
         m_tab(nullptr),
-        m_sizeX(sizeX),
-        m_sizeY(sizeY)
+        m_width(width),
+        m_height(height)
 {
-    m_tab = new Color[m_sizeX * m_sizeY];
+    m_tab = new Color[m_width * m_width];
 }
 
 Image::~Image()
@@ -28,39 +28,39 @@ Image::~Image()
     delete[] m_tab;
 }
 
-int Image::getSizeX() const
+int Image::getWidth() const
 {
-	return m_sizeX;
+	return m_width;
 }
 
-int Image::getSizeY() const
+int Image::getHeight() const
 {
-	return m_sizeY;
+	return m_height;
 }
 
-Color Image::getColor(int x, int y) const
+Color Image::getColor(int w, int h) const
 {
-    return m_tab[x * (m_sizeY) + y];
+    return m_tab[h * (m_width) + w];
 }
 
-void Image::setColor(int x, int y, Color color)
+void Image::setColor(int w, int h, Color color)
 {
-    m_tab[x * (m_sizeY) + y].setColor(color);
+    m_tab[h * (m_width) + w].setColor(color);
 }
 
-int Image::pixelRedToPPM(int x, int y)
+int Image::pixelRedToPPM(int w, int h)
 {
-    return (int)(m_tab[x * (m_sizeY) + y].getRed() * 255);
+    return (int)(m_tab[h * (m_width) + w].getRed() * 255);
 }
 
-int Image::pixelGreenToPPM(int x, int y)
+int Image::pixelGreenToPPM(int w, int h)
 {
-    return (int)(m_tab[x * (m_sizeY) + y].getGreen() * 255);
+    return (int)(m_tab[h * (m_width) + w].getGreen() * 255);
 }
 
-int Image::pixelBlueToPPM(int x, int y)
+int Image::pixelBlueToPPM(int w, int h)
 {
-    return (int)(m_tab[x * (m_sizeY) + y].getBlue() * 255);
+    return (int)(m_tab[h * (m_width) + w].getBlue() * 255);
 }
 
 
@@ -69,20 +69,20 @@ void Image::saveImage(std::string name)
 	std::ofstream file(name);
 
 	file << "P3\n"
-         << m_sizeX
+         << m_width
          << " "
-         << m_sizeY
+         << m_height
          << "\n"
          << 255
          << "\n";
 
-	for(int i = 0; i < m_sizeX; i++)
+	for(int i = 0; i < m_height; i++)
 	{
-	    for(int j = 0; j < m_sizeY; j++)
+	    for(int j = 0; j < m_width; j++)
 	    {
             file << pixelRedToPPM(i, j) << " "
-                 << pixelGreenToPPM(i, j) << " "
-                 << pixelBlueToPPM(i, j) <<" ";
+                 << pixelGreenToPPM(j, i) << " "
+                 << pixelBlueToPPM(j, i) <<" ";
             //if((j)%8) file << "\n";
 	    }
 	file << "\n";
@@ -99,12 +99,12 @@ void Image::saveImageBis(std::string name)
     FILE *file = fopen(name.c_str(), "wb");
 
     fprintf(file, "P6\n");
-    fprintf(file, "%d %d\n", m_sizeX, m_sizeY);
+    fprintf(file, "%d %d\n", m_width, m_height);
     fprintf(file, "255\n");
 
-    for(int i = 0; i < m_sizeX; i++)
+    for(int i = 0; i < m_height; i++)
     {
-        for(int j = 0; j < m_sizeY; j++)
+        for(int j = 0; j < m_width; j++)
         {
             unsigned char r, g, b;
             r = pixelRedToPPM(i, j);

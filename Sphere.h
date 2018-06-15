@@ -47,8 +47,7 @@ public :
     //Other functions
     //===============
 
-    bool intersects(Ray const& ray, Point3d const& position) const;
-    Point3d intersectionPoint(Ray const& ray, Point3d const& position) const;
+    bool intersects(Ray const& ray, Point3d const& position, Hit &hit) const;
 
 private :
 

@@ -22,7 +22,7 @@ public:
 
 	void getColorDiffuse();
 
-	virtual Color getColor(Point3d p) const = 0 ;
+	virtual Color getColor(float u, float v) const = 0 ;
 };
 
 #endif

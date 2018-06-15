@@ -7,9 +7,9 @@ class Image {
 
 public:
 
-	static const int DEFAULT_SIZE_X;
+	static const int DEFAULT_WIDTH;
 
-	static const int DEFAULT_SIZE_Y;
+	static const int DEFAULT_HEIGHT;
 
 
     /*****************
@@ -21,7 +21,7 @@ public:
 
 	Image();
 
-	Image(int sizeX, int sizeY);
+	Image(int width, int height);
 
 	~Image();
 
@@ -29,23 +29,23 @@ public:
     //Setters and Getters
     //===================
 
-	int getSizeX() const;
+	int getWidth() const;
 
-	int getSizeY() const;
+	int getHeight() const;
 
-	Color getColor(int x, int y) const;
+	Color getColor(int w, int h) const;
 
-	void setColor(int x, int y, Color color);
+	void setColor(int w, int h, Color color);
 
 
 	//Other functions
     //===============
 
-	int pixelRedToPPM(int x, int y);
+	int pixelRedToPPM(int w, int h);
 
-	int pixelGreenToPPM(int x, int y);
+	int pixelGreenToPPM(int w, int h);
 
-	int pixelBlueToPPM(int x, int y);
+	int pixelBlueToPPM(int w, int h);
 
     void saveImage(std::string name);
     void saveImageBis(std::string name);
@@ -60,9 +60,9 @@ private:
     //Nous allons donc traiter celui ci comme un tableau 2d.
 	Color *m_tab;
 
-	int m_sizeX;
+	int m_width;
 
-	int m_sizeY;
+	int m_height;
 
 	//Ceci permet d'être sur que personne n'utilisera le constructeur par copie.
 	Image(Image const& i);

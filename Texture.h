@@ -8,13 +8,14 @@
 class Texture : Optic {
 
 public:
-	std::ofstream m_fichier;
 
-	void setFichier();
+    //std::string getFileName() const;
+    //void setFileName();
 
-	void generateTexture();
+//	Color colorAtPixel(float u, float v);
 
-	Color colorAtPixel();
+private:
+    std::string m_fileName;
 };
 
 #endif

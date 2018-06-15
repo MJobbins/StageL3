@@ -74,7 +74,7 @@ public:
 
     //Gènère une image à partir d'un lancé de rayons. numberOfRays 
     //doit être supéreiur ou égale à SizeX * SizeY
-    void makeImage(int sizeX, int sizeY, int numberOfRays) const;
+    void makeImage(int width, int height, int numberOfRays) const;
 	
 	Color startLaser(Vector3d const& vectDirect) const;
 
