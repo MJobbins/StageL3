@@ -45,7 +45,7 @@ Color Texture::getColor(float u, float v) const
 {
     //std::cout << "current color :" << u << "+" << v << std::endl;
     //return v*m_color;
-    std::string name("../Textures/earth.ppm");
+    std::string name(m_fileName);
     std::ifstream file;
 
     file.open(name, std::ios::in);
@@ -60,10 +60,10 @@ Color Texture::getColor(float u, float v) const
     std::getline(file, size);
     std::getline(file, size);
 
-    std::cout << "u :" << u << " v : " << v << " width : " << width << " sizeY : " << height << std::endl;
+    //std::cout << "u :" << u << " v : " << v << " width : " << width << " sizeY : " << height << std::endl;
 
     int pixelW = (int)(u*(float)width);
-    int pixelH = (int)(v*(float)height);
+    int pixelH = (int)((1-v)*(float)height);
 
     long long int pos = file.tellg();
 

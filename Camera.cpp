@@ -34,7 +34,8 @@ m_vertical(DEFAULT_VERTICAL),
 m_horizontal(DEFAULT_HORIZONTAL),
 m_angleV(DEFAULT_ANGLE),
 m_angleH(DEFAULT_ANGLE),
-m_scene(nullptr)
+m_scene(nullptr),
+m_lights(nullptr)
 {}
 
 Camera::Camera(Camera const& source) :
@@ -44,7 +45,8 @@ m_vertical(source.m_vertical),
 m_horizontal(source.m_horizontal),
 m_angleV(source.m_angleV),
 m_angleH(source.m_angleH),
-m_scene(source.m_scene)
+m_scene(source.m_scene),
+m_lights(source.m_lights)
 {}
 
 Camera::Camera(Point3d const& p,
@@ -53,16 +55,23 @@ Camera::Camera(Point3d const& p,
         	   Vector3d const& vHor,
         	   float angleV,
         	   float angleH,
-               std::vector<Entity*> const& scene) :
+               std::vector<Entity*> const& scene,
+               std::vector<SpotLight*> const& lights) :
 m_position(p),
 m_direction(vDir),
 m_vertical(vVer),
 m_horizontal(vHor),
 m_angleV(angleV / 360.0f * 2.0f * (float)M_PI),
 m_angleH(angleH / 360.0f * 2.0f * (float)M_PI),
-m_scene(&scene)
+m_scene(&scene),
+m_lights(&lights)
 {
-    //m_scene = &scene;
+    m_horizontal = m_vertical * m_direction;
+    m_vertical = m_direction * m_horizontal;
+
+    m_direction.normalize();
+    m_vertical.normalize();
+    m_horizontal.normalize();
 }
 
 Camera::~Camera()
@@ -83,6 +92,7 @@ Camera &Camera::operator=(Camera const &source)
     m_angleH = source.m_angleH;
     m_angleV = source.m_angleV;
     m_scene = source.m_scene;
+    m_lights = source.m_lights;
 
     return *this;
 }
@@ -99,7 +109,8 @@ bool operator==(Camera const& lhs, Camera const& rhs)
            (lhs.m_horizontal == rhs.m_horizontal) &&
            (lhs.m_angleV == rhs.m_angleV) &&
            (lhs.m_angleH == rhs.m_angleH) &&
-           (lhs.m_scene == rhs.m_scene);
+           (lhs.m_scene == rhs.m_scene) &&
+           (lhs.m_lights == rhs.m_lights);
 }
 
 bool operator!=(Camera const& lhs, Camera const& rhs)
@@ -181,12 +192,18 @@ void Camera::makeImage(int width, int height, int numberOfRays = 1) const
                            0.0f );
 
                 Vector3d rayOP(m_direction);
-                rayOP += p.getX() * tan(m_angleH) * m_horizontal;
-                rayOP += p.getY() * tan(m_angleV) * m_vertical;
+                rayOP -= p.getX() * tan(m_angleV) * m_vertical;
+                rayOP -= p.getY() * tan(m_angleH) * m_horizontal;
+
+                //rayOP.setXYZ(2000,0,1100);
 
                 rayOP.normalize();
 
-                Color pixelColor = startLaser(rayOP);
+                Ray ray(m_position, rayOP, Color(1.0f));
+
+                //Color pixelColor = startLaser(ray);
+
+                Color pixelColor = ray.traceRay(m_scene, m_lights);
 
                 image.setColor(i, j, pixelColor);
             }
@@ -195,18 +212,19 @@ void Camera::makeImage(int width, int height, int numberOfRays = 1) const
     image.saveImageBis(std::string("test1.ppm"));
 }
 
-Color Camera::startLaser(Vector3d const& vectDirect) const
+
+//Function moved into ray
+        /*
+Color Camera::startLaser(Ray const& ray) const
 {
     Hit closestHit; // Ce sera notre hit final.
-
-    Ray rayOP(m_position, vectDirect, Color(1.0f));
 
     for (const auto &i : *m_scene) {
 
         Hit currentHit;
         currentHit.setEntity(*i);
 
-        if(i->intersects(rayOP, currentHit))
+        if(i->intersects(ray, currentHit))
         {
             if(!closestHit.getHit())
             {
@@ -226,33 +244,43 @@ Color Camera::startLaser(Vector3d const& vectDirect) const
         //La lumière il faudras mettre la couleur de la lumière
     }
     else {
-
-        //CETTE PARTIE VA GERER LA REFLECTION
-        if(closestHit.getEntity())
-
-        return closestHit.getEntity().getColor(closestHit.getU(), closestHit.getV());
+        return closestHit.getColor();
     }
 }
+*/
 
 int main()
 {
 
-    Sphere sphere(1000);
+    Sphere sphere(1);
     UniColor uc(Color::GREEN);
     Texture texture("../Textures/earth.ppm");
-    Entity entite1(sphere, texture, Point3d(1800.0f, 50.0f, 50.0f));
+    Entity entite1(sphere, texture, Point3d(10.0f, 0.0f, 0.0f));
+    entite1.setMirrror(0.5);
 
-    Sphere sphere2(1);
+    Sphere sphere2(2);
     UniColor uc2(Color::MAGENTA);
-    Entity entite2(sphere2, uc2, Point3d(8.0f, 0.0f, 0.0f));
+    Texture texture2("../Textures/sunset.ppm");
+    Entity entite2(sphere2, texture2, Point3d(10.0f, 5.0f, 0.0f));
+    entite2.setMirrror(0.1);
 
     std::vector<Entity*> tableau;
     tableau.push_back(&entite1);
     tableau.push_back(&entite2);
 
-    Camera mainCamera(Point3d::ZERO, Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);
+    SpotLight lumière(Color::WHITE, Point3d::ZERO);
 
-    mainCamera.makeImage(600, 600, 1);
+    std::vector<SpotLight*> tabLights;
+    tabLights.push_back(&lumière);
+
+
+    //Camera mainCamera(Point3d(0.0f,0.0f,0.0f), Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);
+
+    //Camera mainCamera(Point3d(2000.0f, 0.0f,20000.0f), -Vector3d::K, Vector3d::I, Vector3d::ZERO, 5.0f, 5.0f, tableau);
+
+    Camera mainCamera(Point3d(0.0f, 0.0f, 0.0f), Vector3d::I, Vector3d::K, Vector3d::ZERO, 45.0f, 45.0f, tableau, tabLights);
+
+    mainCamera.makeImage(1000, 1000, 1);
 
     return 0;
 }

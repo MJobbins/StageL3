@@ -10,6 +10,7 @@ class Hit {
 private:
 	Entity *m_entity;
 	Point3d m_ptIntersection;
+	Vector3d m_originalRay;
 	Vector3d m_normal;
 	float m_u;
 	float m_v;
@@ -29,6 +30,7 @@ public:
     Hit(Hit const& source);
     Hit(Entity entity,
         Point3d point,
+        Vector3d originalRay,
         Vector3d normal,
         float u,
         float v,
@@ -55,6 +57,9 @@ public:
 	Point3d getPtIntersection() const;
 	void setPtIntersection(Point3d const& point);
 
+    Vector3d getOriginalRay() const;
+    void setOriginalRay(Vector3d const& originalRay);
+
 	Vector3d getNormal() const;
 	void setNormal(Vector3d const& normal);
 
@@ -69,6 +74,8 @@ public:
 
 	bool getHit() const;
 	void setHit(bool hit);
+
+	Color getColor();
 
 	Ray makeRay();
 };

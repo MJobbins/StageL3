@@ -33,7 +33,8 @@ public:
            Vector3d const& vHor,
            float angleV,
            float angleH,
-           std::vector<Entity*> const& scene);
+           std::vector<Entity*> const& scene,
+		   std::vector<SpotLight*> const& lights);
     virtual ~Camera();
 
 
@@ -76,7 +77,7 @@ public:
     //doit être supéreiur ou égale à SizeX * SizeY
     void makeImage(int width, int height, int numberOfRays) const;
 	
-	Color startLaser(Vector3d const& vectDirect) const;
+	//Color startLaser(Ray const& ray) const;
 
 private:
 
@@ -94,6 +95,7 @@ private:
     float m_angleH;
 
     const std::vector<Entity*>* m_scene;
+    const std::vector<SpotLight*>* m_lights;
 };
 
 #endif

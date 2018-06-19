@@ -2,7 +2,7 @@
 #define GEOMETRY_H
 
 #include "Point3d.h"
-#include "Ray.h"
+class Ray;
 class Hit;
 
 class Geometry {

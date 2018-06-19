@@ -6,6 +6,7 @@
 #include "Geometry.h"
 #include "Optic.h"
 #include "Ray.h"
+class Hit;
 
 class Entity {
 
@@ -70,7 +71,11 @@ public:
 
 	bool intersects(Ray const& ray, Hit &hit) const;
 
-	Color getColor(float u, float v) const;
+	Color getColor(float u, float v, Hit &hit) const;
+
+	float getMirror() const;
+
+	float setMirrror(float m);
 
 private:
 

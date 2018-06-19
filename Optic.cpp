@@ -1,14 +1,12 @@
 #include "Optic.h"
 #include "Color.h"
 
-float Optic::getMirror() {
-	// TODO - implement Optic::getMirror
-	throw "Not yet implemented";
+float Optic::getMirror() const{
+	return m_mirror;
 }
 
-void Optic::setMirror() {
-	// TODO - implement Optic::setMirror
-	throw "Not yet implemented";
+void Optic::setMirror(float m) {
+	m_mirror = m;
 }
 
 Color Optic::getColorMirrror(int Point3d_p) {
@@ -29,5 +27,10 @@ float Optic::getTransparency() {
 void Optic::getColorDiffuse() {
 	// TODO - implement Optic::getColorDiffuse
 	throw "Not yet implemented";
+}
+
+Optic::~Optic()
+{
+
 }
 

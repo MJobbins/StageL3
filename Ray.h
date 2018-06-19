@@ -1,9 +1,13 @@
 #ifndef RAY_H
 #define RAY_H
 
+#include <vector>
 #include "Point3d.h"
 #include "Vector3d.h"
 #include "Color.h"
+#include "SpotLight.h"
+
+class Entity;
 
 class Ray {
 
@@ -40,6 +44,8 @@ public:
 
 	Color getColor() const;
 	void setColor(Color const& source);
+
+	Color traceRay(const std::vector<Entity*>* scene, const std::vector<SpotLight*> *lights);
 
 private:
 

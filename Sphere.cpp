@@ -88,9 +88,11 @@ bool Sphere::intersects(Ray const& ray, Point3d const& position, Hit &hit) const
     ));
 
     hit.setHit(h2 <= m_rayon*m_rayon);
+
     if(hit.getHit()) {
-        hit.setDistance(position.distance(hit.getPtIntersection()));
+        hit.setDistance(ray.getOrigin().distance(hit.getPtIntersection())); // Position = sphere pas camera A CHANGER
         hit.setNormal(Vector3d(position, hit.getPtIntersection()));
+
 
         // CALCUL DE U ET V, A PLACER DANS UNE AUTRE FONCTION
         //Vector3d Vn(0, 0, m_rayon);
@@ -118,9 +120,14 @@ bool Sphere::intersects(Ray const& ray, Point3d const& position, Hit &hit) const
 
 */
         //V2 TRY
-        float u = 0.5f + ((atan2f(Vp.getX(), Vp.getZ()))/ (2.0F * PI_F));
-        float v = 0.5f - (asinf(Vp.getY())/ PI_F);
+        float u = 0.5f + ((atan2f(Vp.getY(), Vp.getX()))/ (2.0f * PI_F));
+        //float v = 0.5f - (asinf(Vp.getZ())/ PI_F);
+        float v = -Vp.getZ() / 2.0f + 0.5f;
 
+        /*std::cout << "uv (" << u << ", " << v << ") p(" << hit.getPtIntersection().getX()
+                  << ", " << hit.getPtIntersection().getY() << ", " << hit.getPtIntersection().getZ()
+                  << ") vp(" << Vp.getX() << ", " << Vp.getY() << ", " << Vp.getZ() << ")" << std::endl;
+        */
         //V3 TRY
        /* float tempV = acosf(Vp.getZ());
         float tempU = atan2f(Vp.getY(), Vp.getX());

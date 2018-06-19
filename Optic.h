@@ -11,11 +11,11 @@ private:
 
 public:
 
-	virtual ~Optic() = 0;
+	virtual ~Optic();
 
-	float getMirror();
+	float getMirror() const;
 
-	void setMirror();
+	void setMirror(float m);
 
 	Color getColorMirrror(int Point3d_p);
 
@@ -25,7 +25,7 @@ public:
 
 	void getColorDiffuse();
 
-	virtual Color getColor(float u, float v) = 0;
+	virtual Color getColor(float u, float v) const = 0;
 };
 
 #endif

@@ -23,7 +23,7 @@ m_z(source.m_z)
 {}
 
 Vector3d::Vector3d(Point3d const &a, Point3d const &b) :
-        m_x(b.getX() - a.getY()),
+        m_x(b.getX() - a.getX()),
         m_y(b.getY() - a.getY()),
         m_z(b.getZ() - a.getZ())
 {}
@@ -71,7 +71,7 @@ Vector3d & Vector3d::operator-=(Vector3d const& source)
 Vector3d & Vector3d::operator*=(Vector3d const& source)
 {
     float tmpX = m_y*source.getZ() - m_z*source.getY();
-    float tmpY = m_x*source.getZ() - m_z*source.getX();
+    float tmpY = m_z*source.getX() - m_x*source.getZ();
     float tmpZ = m_x*source.getY() - m_y*source.getX();
 
 	m_x = tmpX;
