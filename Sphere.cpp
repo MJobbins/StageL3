@@ -91,7 +91,9 @@ bool Sphere::intersects(Ray const& ray, Point3d const& position, Hit &hit) const
 
     if(hit.getHit()) {
         hit.setDistance(ray.getOrigin().distance(hit.getPtIntersection())); // Position = sphere pas camera A CHANGER
-        hit.setNormal(Vector3d(position, hit.getPtIntersection()));
+        Vector3d normal(Vector3d(position, hit.getPtIntersection()));
+        normal.normalize();
+        hit.setNormal(normal);
 
 
         // CALCUL DE U ET V, A PLACER DANS UNE AUTRE FONCTION

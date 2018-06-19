@@ -6,6 +6,8 @@
 #include "Vector3d.h"
 #include "Color.h"
 #include "SpotLight.h"
+//#include "Hit.h"
+class Hit;
 
 class Entity;
 
@@ -45,6 +47,7 @@ public:
 	Color getColor() const;
 	void setColor(Color const& source);
 
+	Hit checkHit(const std::vector<Entity*> *scene);
 	Color traceRay(const std::vector<Entity*>* scene, const std::vector<SpotLight*> *lights);
 
 private:

@@ -256,11 +256,11 @@ int main()
     UniColor uc(Color::GREEN);
     Texture texture("../Textures/earth.ppm");
     Entity entite1(sphere, texture, Point3d(10.0f, 0.0f, 0.0f));
-    entite1.setMirrror(0.5);
+    entite1.setMirrror(0.1);
 
-    Sphere sphere2(2);
+    Sphere sphere2(4);
     UniColor uc2(Color::MAGENTA);
-    Texture texture2("../Textures/sunset.ppm");
+    Texture texture2("../Textures/alaska.ppm");
     Entity entite2(sphere2, texture2, Point3d(10.0f, 5.0f, 0.0f));
     entite2.setMirrror(0.1);
 
@@ -268,10 +268,12 @@ int main()
     tableau.push_back(&entite1);
     tableau.push_back(&entite2);
 
-    SpotLight lumière(Color::WHITE, Point3d::ZERO);
+    SpotLight lumière(Color(0.5,0,0.5), Point3d(8, 0, -4));
+    SpotLight lumière2(Color(0.6,0.6,0), Point3d(9, -4, 4));
 
     std::vector<SpotLight*> tabLights;
     tabLights.push_back(&lumière);
+    tabLights.push_back(&lumière2);
 
 
     //Camera mainCamera(Point3d(0.0f,0.0f,0.0f), Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);
@@ -280,7 +282,7 @@ int main()
 
     Camera mainCamera(Point3d(0.0f, 0.0f, 0.0f), Vector3d::I, Vector3d::K, Vector3d::ZERO, 45.0f, 45.0f, tableau, tabLights);
 
-    mainCamera.makeImage(1000, 1000, 1);
+    mainCamera.makeImage(600, 600, 1);
 
     return 0;
 }

@@ -83,6 +83,7 @@ bool operator==(Hit const &lhs, Hit const &rhs)
 
 Entity Hit::getEntity() const
 {
+
 	return *m_entity;
 }
 
