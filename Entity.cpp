@@ -145,9 +145,19 @@ float Entity::getMirror() const
     return m_visual->getMirror();
 }
 
-float Entity::setMirrror(float m)
+void Entity::setMirrror(float m)
 {
     m_visual->setMirror(m);
+}
+
+Color Entity::getSpecularColor() const
+{
+	return m_visual->getSpecularColor();
+}
+
+void Entity::setSpecularColor(Color newSpecColor)
+{
+	m_visual->setSpecularColor(newSpecColor);
 }
 
 

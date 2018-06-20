@@ -255,25 +255,30 @@ int main()
     Sphere sphere(1);
     UniColor uc(Color::GREEN);
     Texture texture("../Textures/earth.ppm");
-    Entity entite1(sphere, texture, Point3d(10.0f, 0.0f, 0.0f));
-    entite1.setMirrror(0.1);
+    Entity entite1(sphere, uc, Point3d(10.0f, 0.0f, 0.0f));
+    entite1.setMirrror(0.5);
 
     Sphere sphere2(4);
     UniColor uc2(Color::MAGENTA);
     Texture texture2("../Textures/alaska.ppm");
-    Entity entite2(sphere2, texture2, Point3d(10.0f, 5.0f, 0.0f));
-    entite2.setMirrror(0.1);
+    Entity entite2(sphere2, texture, Point3d(10.0f, 5.0f, 0.0f));
+    entite2.setMirrror(0.2);
+
+    Sphere sphere3(3);
+    Entity entite3(sphere3, uc2, Point3d(14.0f, 3.0f, 3.0f));
+    //entite3.setMirrror(0.01);
 
     std::vector<Entity*> tableau;
     tableau.push_back(&entite1);
     tableau.push_back(&entite2);
+    tableau.push_back(&entite3);
 
-    SpotLight lumière(Color(0.5,0,0.5), Point3d(8, 0, -4));
-    SpotLight lumière2(Color(0.6,0.6,0), Point3d(9, -4, 4));
+    SpotLight lumière(Color(0.8), Point3d(5, 0, 4));
+    //SpotLight lumière2(Color(0.6,0.6,0), Point3d(9, -4, 4));
 
     std::vector<SpotLight*> tabLights;
     tabLights.push_back(&lumière);
-    tabLights.push_back(&lumière2);
+    //tabLights.push_back(&lumière2);
 
 
     //Camera mainCamera(Point3d(0.0f,0.0f,0.0f), Vector3d::I, Vector3d::K, Vector3d::J, 45.0f, 45.0f, tableau);

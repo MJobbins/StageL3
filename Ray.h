@@ -6,6 +6,7 @@
 #include "Vector3d.h"
 #include "Color.h"
 #include "SpotLight.h"
+
 //#include "Hit.h"
 class Hit;
 
@@ -46,6 +47,9 @@ public:
 
 	Color getColor() const;
 	void setColor(Color const& source);
+
+	Color difuseColor(const std::vector<Entity*>* scene, const std::vector<SpotLight*>* lights, Hit closestHit, float mirror);
+    Color specularColor(const std::vector<Entity*>* scene ,const std::vector<SpotLight*>* lights, Hit closestHit);
 
 	Hit checkHit(const std::vector<Entity*> *scene);
 	Color traceRay(const std::vector<Entity*>* scene, const std::vector<SpotLight*> *lights);

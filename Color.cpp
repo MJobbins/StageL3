@@ -267,3 +267,12 @@ float Color::getLuminosity() const
 	return (0.299F * m_red + 0.587 * m_green + 0.114 * m_blue);
 }
 
+void Color::clamp()
+{
+	if(m_blue > 1)
+		m_blue = 1;
+	if(m_red > 1)
+		m_red = 1;
+	if(m_green > 1)
+		m_green = 1;
+}

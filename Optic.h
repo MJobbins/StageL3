@@ -8,14 +8,21 @@ class Optic {
 
 private:
 	float m_mirror;
+	Color m_specularColor;
 
 public:
+
+	Optic();
 
 	virtual ~Optic();
 
 	float getMirror() const;
 
 	void setMirror(float m);
+
+	Color getSpecularColor() const;
+
+	void setSpecularColor(Color c);
 
 	Color getColorMirrror(int Point3d_p);
 

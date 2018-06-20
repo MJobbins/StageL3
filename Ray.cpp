@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sys/param.h>
+#include <math.h>
 #include "Ray.h"
 #include "Point3d.h"
 #include "Vector3d.h"
@@ -81,86 +83,106 @@ Hit Ray::checkHit(const std::vector<Entity*> *scene)
     return closestHit;
 }
 
-//New function for light colors
+Color Ray::difuseColor(const std::vector<Entity*>* scene ,const std::vector<SpotLight*>* lights, Hit closestHit, float mirror)
+{
+    Color col1 = closestHit.getColor();
+    Color difuseColor(0.0);
+    for(const auto &i : *lights)
+    {
+        Vector3d dir(i->getPosition(), closestHit.getPtIntersection());
+        dir.normalize();
+
+        float distLE = i->getPosition().distance(closestHit.getPtIntersection());
+
+        Ray lightRay(i->getPosition(), dir, Color::WHITE);
+        Hit closestLightHit = lightRay.checkHit(scene);
+
+
+        //On ajout une petit floatp pour le manque de précision des calculs.
+        if (closestLightHit.getHit() && (distLE <= closestLightHit.getDistance()+0.001f) )
+        {
+            float cosB = (closestHit.getNormal()^(-dir))/ closestHit.getNormal().length() * (-dir).length();
+            difuseColor += i->getColor() * cosB;
+        }
+    }
+
+    col1 *= difuseColor + 0.05; //0.05 = ambiant color.
+    col1 *= (1-mirror);
+    return col1;
+}
+
+Color Ray::specularColor(const std::vector<Entity*>* scene ,const std::vector<SpotLight*>* lights, Hit closestHit)
+{
+    Color specColor = closestHit.getEntity().getSpecularColor();
+
+    float specMulti = 0;
+
+    for(const auto &i : *lights)
+    {
+        Vector3d dir(i->getPosition(), closestHit.getPtIntersection());
+        dir.normalize();
+
+        float distLE = i->getPosition().distance(closestHit.getPtIntersection());
+
+        Ray lightRay(i->getPosition(), dir, Color::WHITE);
+        Hit closestLightHit = lightRay.checkHit(scene);
+
+
+        //On ajout une petit floatp pour le manque de précision des calculs.
+        if (closestLightHit.getHit() && (distLE <= closestLightHit.getDistance()+0.001f) )
+        {
+            float cosA= -((-dir)^closestHit.getNormal())*2.0f;
+
+            Vector3d tmpNormal(closestHit.getNormal() * cosA);
+            //tmpNormal.normalize();
+            Vector3d reflectVector = tmpNormal + (-dir);
+            reflectVector.normalize();
+
+            specMulti = MAX(-(reflectVector^(-dir)), 0);
+            specMulti = powf(specMulti, 5);
+        }
+    }
+    specColor *= specMulti;
+    return specColor;
+}
+
 
 Color Ray::traceRay(const std::vector<Entity*> *scene, const std::vector<SpotLight*> *lights)
 {
-    /*
-    Hit closestHit; // Ce sera notre hit final.
-
-    for (const auto &i : *scene) {
-        Hit currentHit;
-        currentHit.setEntity(*i);
-        currentHit.setOriginalRay(m_direction);
-
-        if (i->intersects(*this, currentHit)) {
-            if (!closestHit.getHit()) {
-                //std::cout << "premier" << std::endl;
-                closestHit = currentHit;
-            } else {
-                if (closestHit.getDistance() > currentHit.getDistance())
-                    closestHit = currentHit;
-            }
-        }
-    }
-    */
-
-    //Should seperate in a second function here.
 
     Hit closestHit = checkHit(scene);
 
     if(closestHit.getHit()) {
-        //std::cout << "hit ? : " << closestHit.getHit() << std::endl;
-        //std::cout << " Entity touched : " << closestHit.getEntity().getPosition().getX() << std::endl;
 
         float mirror = closestHit.getEntity().getMirror();
-        //std::cout << "mirror : " <<  mirror << std::endl;
 
-        //return closestHit.getColor();
+        Color mirrorColor(0.0);
+
         if (mirror > 0) {
-            //La couleur non réfléchie.
-            Color col1 = closestHit.getColor();
 
-            Color difuseColor(0.0);
-
-            for(const auto &i : *lights)
-            {
-                Vector3d dir(i->getPosition(), closestHit.getPtIntersection());
-                dir.normalize();
-
-                float distLE = i->getPosition().distance(closestHit.getPtIntersection());
-
-                Ray lightRay(i->getPosition(), dir, Color::WHITE);
-                Hit closestLightHit = lightRay.checkHit(scene);
-
-
-                //On ajout une petit floatp pour le manque de précision des calculs.
-                if (closestLightHit.getHit() && (distLE <= closestLightHit.getDistance()+0.0001f) )
-                {
-                    float cosB = (closestHit.getNormal()^(-dir))/ closestHit.getNormal().length() * (-dir).length();
-                    difuseColor += i->getColor() * cosB;
-                }
-            }
-
-            col1 *= difuseColor + 0.2;
-            col1 *= (1-mirror);
-
+            /*
+             * AJOUTER COULEUR AMBIANTE
+             */
 
             //La couleur réflechie.
             float c1 = -(closestHit.getNormal() ^ closestHit.getOriginalRay());
             Vector3d refracted = closestHit.getOriginalRay() + (2 * closestHit.getNormal() * c1);
 
-
             Ray refractedRay(closestHit.getPtIntersection(), refracted, Color(1.0f));
 
-            Color col2 = mirror * refractedRay.traceRay(scene, lights);
-
-
-            return col1+col2;
-
+            mirrorColor = mirror * refractedRay.traceRay(scene, lights);
 
         }
-        return closestHit.getColor();
+        //La couleur non réflechie
+        Color difColor = difuseColor(scene, lights, closestHit, mirror);
+
+        //La couleur birllante (specular)
+        Color specColor = specularColor(scene, lights, closestHit);
+
+
+        Color result(difColor + specColor + mirrorColor);
+        result.clamp();
+        return result;
     }
     else {
         return Color::BLACK; //Pour le moment noir, lorsqu'on auras de

@@ -75,7 +75,13 @@ public:
 
 	float getMirror() const;
 
-	float setMirrror(float m);
+	void setMirrror(float m);
+
+	Color getSpecularColor() const;
+
+	void setSpecularColor(Color newSpecColor);
+
+
 
 private:
 

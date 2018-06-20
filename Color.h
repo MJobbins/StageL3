@@ -76,6 +76,7 @@ public :
     float getGrey() const;
     void setGrey(float g);
     float getLuminosity() const;
+    void clamp();
 
 
 private:
